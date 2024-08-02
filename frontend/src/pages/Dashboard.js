@@ -1,7 +1,7 @@
 import React from "react";
 import Card1 from "../components/Cards/Card1";
 
-export default function Dashboard() {
+const Dashboard = () => {
     return (
         <div className="h-screen max-h-[1000px] flex flex-col justify-center">
             <div className="min-h-60 w-screen flex flex-row justify-center gap-64">
@@ -11,3 +11,5 @@ export default function Dashboard() {
         </div>
     )
 }
+
+export default Dashboard;

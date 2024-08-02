@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Navbar() {
+const Navbar = () => {
     return (
         <div className="w-screen">
             <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-3 dark:bg-neutral-800">
@@ -30,3 +30,5 @@ export default function Navbar() {
         
     )
 }
+
+export default Navbar;

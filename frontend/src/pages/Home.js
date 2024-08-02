@@ -1,4 +1,4 @@
-export default function Home() {
+const Home = () => {
     return (
       <div className="w-screen h-screen flex flex-col items-center justify-center max-h-[1000px]">
         <div class="relative overflow-hidden min-w-[1500px] min-h-[700px]">
@@ -40,3 +40,4 @@ export default function Home() {
     )
   }
   
+export default Home;

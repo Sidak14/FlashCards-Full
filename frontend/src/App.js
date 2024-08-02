@@ -14,6 +14,7 @@ import Questions from "./pages/Questions";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import "preline/preline";
+import Test from "./pages/Test";
 
 
 const Layout = () => {
@@ -51,11 +52,15 @@ const router = createBrowserRouter([
         path: "/questions",
         element: <Questions />,
       },
+      {
+        path: "/test",
+        element: <Test />
+      }
     ],
   }
 ]);
 
-function App() {
+const App = () => {
   return (
     <div className="app">
       <div className="container">

@@ -1,4 +1,4 @@
-export default function Register() {
+const Register = () => {
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center max-h-[1000px]">
       <div class="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700 max-w-96">
@@ -73,3 +73,5 @@ export default function Register() {
     </div>
   )
 }
+
+export default Register;

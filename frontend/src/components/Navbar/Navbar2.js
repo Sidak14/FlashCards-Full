@@ -12,7 +12,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Navbar2() {
+const Navbar2 = () => {
   return (
     <Disclosure as="nav" className="bg-gray-800 w-screen">
       <div className="mx-auto max-w-full px-2 sm:px-6 lg:px-8">
@@ -121,3 +121,5 @@ export default function Navbar2() {
     </Disclosure>
   )
 }
+
+export default Navbar2;
