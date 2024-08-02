@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import "preline/preline";
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
       },
     ],
   }
