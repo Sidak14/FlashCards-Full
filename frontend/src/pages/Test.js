@@ -10,32 +10,32 @@ const allQuestions = [
     },
     {
         question: "This is question 2",
-        answer: "This is question 2",
+        answer: "This is answer 2",
         id: 2,
     },
     {
         question: "This is question 3",
-        answer: "This is question 3",
+        answer: "This is answer 3",
         id: 3,
     },
     {
         question: "This is question 4",
-        answer: "This is question 4",
+        answer: "This is answer 4",
         id: 4,
     },
     {
         question: "This is question 5",
-        answer: "This is question 5",
+        answer: "This is answer 5",
         id: 5,
     },
     {
         question: "This is question 6",
-        answer: "This is question 6",
+        answer: "This is answer 6",
         id: 6,
     },
     {
         question: "This is question 7",
-        answer: "This is question 7",
+        answer: "This is answer 7",
         id: 7,
     },
     {
@@ -93,13 +93,17 @@ const Test = () => {
         setActiveCard(!activeCard);
     }
 
-    const getNextQuestion = () => {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    const getNextQuestion = async () => {
+        setActiveCard(!activeCard);
+        await sleep(300);
         if (currentQuestion >= (allQuestions.length - 1)) {
             setcurrentQuestion(-1);
         } else {
             setcurrentQuestion(currentQuestion + 1);
         }
-        setActiveCard(!activeCard);
+        
     }
 
     return (

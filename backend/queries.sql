@@ -1,0 +1,12 @@
+CREATE TABLE users(
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(100)
+);
+
+CREATE TABLE questions(
+	id SERIAL PRIMARY KEY,
+	question VARCHAR(1000) NOT NULL,
+	answer VARCHAR(1000) NOT NULL,
+	user_id INTEGER REFERENCES users(id)
+);

@@ -1,6 +1,47 @@
 import React from 'react';
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [inputs, setInput] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setInput(prev => ({...prev, [e.target.name]: e.target.value}));
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    setError("");
+    try {
+      const res = await axios.post('/login', inputs)
+      console.log(res);
+    } catch (err) {
+      let error = "";
+      if (err.response.data == "Invalid Email") {
+        error = "Invalid email";
+      } else if (err.response.data === "Password must be greater than 8 letters.") {
+        error = "Short pass";
+      } else if (err.response.data === "Passwords do not match.") {
+        error = "Wrong pass";
+      } else if (err.response.data === "Email already exists, try logging in.") {
+        error = "User exists";
+      } else {
+        error = err.response.data;
+      }
+      console.log(error);
+      setError(error);
+    }
+  }
+
+  
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center max-h-[1200px]">
       <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700 max-w-96 ">
@@ -9,7 +50,7 @@ const Login = () => {
             <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Sign in</h1>
             <p className="mt-2 text-sm text-gray-600 dark:text-neutral-400">
               Don't have an account yet?
-              <a className="text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500" href="../examples/html/signup.html">
+              <a className="text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500" href="/register">
                 Sign up here
               </a>
             </p>
@@ -21,7 +62,7 @@ const Login = () => {
                 <div>
                   <label for="email" className="block text-sm mb-2 dark:text-white">Email address</label>
                   <div className="relative">
-                    <input type="email" id="email" name="email" className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" required aria-describedby="email-error" />
+                    <input type="email" id="email" name="email" onChange={handleChange} className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" required aria-describedby="email-error" />
                     <div className="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
                       <svg className="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
@@ -37,7 +78,7 @@ const Login = () => {
                     <a className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500" href="../examples/html/recover-account.html">Forgot password?</a>
                   </div>
                   <div className="relative">
-                    <input type="password" id="password" name="password" className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" required aria-describedby="password-error" />
+                    <input type="password" id="password" name="password" onChange={handleChange} className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" required aria-describedby="password-error" />
                     <div className="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
                       <svg className="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
@@ -56,7 +97,7 @@ const Login = () => {
                   </div>
                 </div>
 
-                <button type="submit" className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">Sign in</button>
+                <button type="submit" onClick={handleSubmit} className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">Sign in</button>
               </div>
             </form>
           </div>
