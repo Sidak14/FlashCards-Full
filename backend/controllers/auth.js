@@ -5,10 +5,9 @@ import jwt from "jsonwebtoken";
 const saltRounds = 2;
 
 export const register = async (req, res) => {
-    const reqData = JSON.parse(req.body);
-    const email = reqData.email;
-    const password = reqData.password;
-    const confirmPassword = reqData.confirmPassword;
+    const email = req.body.email;
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
 
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!regex.test(email)) {
@@ -56,11 +55,8 @@ export const register = async (req, res) => {
 }
 
 export const login = async (req, res) => {
-    console.log("yo");
-
-    const reqData = JSON.parse(req.body);
-    const email = reqData.email;
-    const password = reqData.password;
+    const email = req.body.email;
+    const password = req.body.password;
 
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!regex.test(email)) {
@@ -88,6 +84,7 @@ export const login = async (req, res) => {
             const { password, ...other } = user;
             
             res.cookie("access_token", token, {
+                maxAge: 1000 * 60 * 60 * 24, // 1000 mlliseconds * 60 seconds * 60 minutes * 24 Hours
                 httpOnly: true
             }).status(200).json(other);
         });
@@ -97,5 +94,8 @@ export const login = async (req, res) => {
 }
 
 export const logout = (req, res) => {
-
+    res.clearCookie("access_token", {
+        sameSite: "none",
+        secure: true
+    }).status(200).json("User has been logged out");
 }
