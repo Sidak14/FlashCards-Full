@@ -21,30 +21,35 @@ const Login = () => {
     e.preventDefault();
     setError("");
     try {
-      const res = await axios.post('/login', inputs)
+      const res = await fetch('http://localhost:8800/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(inputs)
+      });
       console.log(res);
-    } catch (err) {
-      let error = "";
-      if (err.response.data == "Invalid Email") {
-        error = "Invalid email";
-      } else if (err.response.data === "Password must be greater than 8 letters.") {
-        error = "Short pass";
-      } else if (err.response.data === "Passwords do not match.") {
-        error = "Wrong pass";
-      } else if (err.response.data === "Email already exists, try logging in.") {
-        error = "User exists";
+
+      if (res.ok) {
+        console.log(await res.json());
       } else {
-        error = err.response.data;
+        let error = await res.json();
+        if (error == "Invalid Email") {
+          error = "Invalid email";
+        } else if (error === "Incorrect password") {
+          error = "Wrong combo";
+        } else if (error === "Incorrect email") {
+          error = "Wrong combo";
+        }
+        console.log(error);
+        setError(error);
       }
-      console.log(error);
-      setError(error);
+    } catch (err) {
+      console.log(err);
     }
   }
 
   
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center max-h-[1200px]">
-      <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700 max-w-96 ">
+      <div className="min-w-[400px] mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700 max-w-96 ">
         <div className="p-4 sm:p-7">
           <div className="text-center">
             <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Sign in</h1>

@@ -1,8 +1,6 @@
 import bcrypt from "bcrypt";
 import db from "../db.js";
-import session from "express-session";
-import passport from "passport";
-import { Strategy } from "passport-local";
+import jwt from "jsonwebtoken";
 
 const saltRounds = 2;
 
@@ -57,32 +55,17 @@ export const register = async (req, res) => {
     }
 }
 
-export const loginSucess = (req, res) => {
-    console.log("hi success");
-    return res.status(200).json(req.user.id);
-}
+export const login = async (req, res) => {
+    console.log("yo");
 
-export const loginFail = (req, res) =>  {
-    console.log("hi fail");
-    console.log(req.body)
-    return res.status(400).json("err");
-}
-
-export const login2 = async (req, res) => {
-    console.log(req.body);
-    console.log(req.user);
-}
-
-export const logout = (req, res) => {
-
-}
-
-passport.use(new Strategy(async function verify(email, password, cb) {
-    console.log("hi strategy:)");
+    const reqData = JSON.parse(req.body);
+    const email = reqData.email;
+    const password = reqData.password;
 
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!regex.test(email)) {
-        return cb("Invalid Email");
+        console.log("failed email test");
+        return res.status(400).json("Invalid Email");
     }
 
     try {
@@ -90,33 +73,29 @@ passport.use(new Strategy(async function verify(email, password, cb) {
             [email]
         );
         if (result.rows.length <= 0) {
-            return cb("User not found!");
+            return res.status(400).json("Incorrect email");
         }
 
         const user = result.rows[0];
         const storedPassword = user.password;
 
         bcrypt.compare(password, storedPassword, async (err, result) => {
-            if (err) {
-                return cb(err);
-            }
+            if (err) return res.status(500).json(err);
 
-            if (result) {
-                return cb(null, user);
-            } else {
-                return cb(null, false);
-            }
+            if (!result) return res.status(400).json("Incorrect password");
+            
+            const token = jwt.sign({ id: user.id }, process.env.SESSION_SECRET);
+            const { password, ...other } = user;
+            
+            res.cookie("access_token", token, {
+                httpOnly: true
+            }).status(200).json(other);
         });
-
     } catch (err) {
-        return cb(err);
+        return res.status(500).json(err);
     }
-}));
+}
 
-passport.serializeUser((user, cb) => {
-    cb(null, user);
-});
+export const logout = (req, res) => {
 
-passport.deserializeUser((user, cb) => {
-    cb(null, user);
-});
+}
