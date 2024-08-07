@@ -14,9 +14,21 @@ const db = new pg.Client({
         require: true,
         ca: process.env.PG_CA_CERT,
     }
+
 });
 
 await db.connect();
+
+const query1 = "CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY,email VARCHAR(100) NOT NULL UNIQUE,password VARCHAR(100))"
+const query2 = "CREATE TABLE IF NOT EXISTS questions(id SERIAL PRIMARY KEY,question VARCHAR(1000) NOT NULL,answer VARCHAR(1000) NOT NULL,user_id INTEGER REFERENCES users(id))"
+
+await db.query(query1, function (err, result) {
+    console.log(err, result);
+})
+await db.query(query2, function (err, result) {
+    console.log(err, result);
+})
+
 
 
 export default db;
