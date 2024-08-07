@@ -1,4 +1,4 @@
-const API_ENDPOINT = "http://localhost:8800/api"
+const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
 
 export const sendPost = async (endpoint, inputs = {}) => {
     console.log(endpoint, inputs);
