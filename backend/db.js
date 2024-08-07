@@ -9,6 +9,13 @@ const db = new pg.Client({
     database: process.env.PG_DATABASE,
     password: process.env.PG_PASSWORD,
     port: process.env.PG_PORT,
+    dialect: "postgres",
+    dialectOptions: {
+        ssl: {
+        require: true, // This will help you. But you will see nwe error
+        rejectUnauthorized: false // This line will fix new error
+        }
+    },
 });
 db.connect();
 
