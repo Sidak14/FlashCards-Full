@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import QuestionCard from "../components/Cards/QuestionCards";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
+import { sendDelete, sendGet, sendPost, sendPut } from "../context/backendCommunication";
+import AddQuestionCard from "../components/Cards/addQuestionCard";
 
 const allQuestions = [
     {
@@ -86,6 +90,49 @@ const allQuestions = [
 
 
 const Questions = () => {
+    const { currentUser } = useContext(AuthContext);
+    let navigate = useNavigate();
+    if (!currentUser) {
+        console.log("cant be here");
+        navigate('/');
+    }
+
+    const [allQuestions, setAllQuestions] = useState([]);
+    const [updateQuestions, setUpdateQuestions] = useState(0);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await sendGet(`/questions/getquestions/${currentUser.id}`);
+                const resJson = await res.json();
+                console.log(resJson);
+                setAllQuestions(resJson);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        fetchData();
+    }, [updateQuestions]);
+
+    const deleteQuestion = async (id) => {
+        const res = await sendDelete(`/questions/deletequestion/${currentUser.id}/${id}`);
+        console.log(await res.json());
+        setUpdateQuestions(updateQuestions+1);
+    }
+
+    const updateQuestion = async (id, inputs) => {
+        console.log(inputs);
+        const res = await sendPut(`/questions/updatequestion/${currentUser.id}/${id}`, inputs);
+        console.log(await res.json());
+        setUpdateQuestions(updateQuestion+1);
+    }
+
+    const addQuestion = async (inputs) => {
+        const res = await sendPost(`/questions/addquestion/${currentUser.id}`, inputs);
+        setUpdateQuestions(updateQuestions+1);
+    }
+    
+
     return (
         <div className="w-screen">
             <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
@@ -97,10 +144,10 @@ const Questions = () => {
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {allQuestions.map((item) => (
-                        <QuestionCard question={item.question} answer={item.answer} key={item.id} minWidth="96" />
+                        <QuestionCard question={item.question} answer={item.answer} key={item.id} id={item.id} updateFunction={updateQuestion} deleteFunction={deleteQuestion} minWidth="96" />
                     ))}
 
-                    <QuestionCard question="Want to add more Questions?" answer="Click below" minWidth="96" />
+                    <AddQuestionCard question="Want to add more Questions?" answer="Click below" addFunction={addQuestion} minWidth="96" />
                 </div>
             </div>
         </div>

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from '../context/authContext';
 
 const Login = () => {
   const [inputs, setInput] = useState({
@@ -13,6 +14,9 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const { login } = useContext(AuthContext);
+  //console.log(currentUser);
+
   const handleChange = (e) => {
     setInput(prev => ({...prev, [e.target.name]: e.target.value}));
   }
@@ -21,16 +25,10 @@ const Login = () => {
     e.preventDefault();
     setError("");
     try {
-      const res = await fetch('http://localhost:8800/api/auth/login', {
-        method: 'POST',
-        body: JSON.stringify(inputs)
-      });
-      console.log(res);
+      const res = await login(inputs);
 
-      if (res.ok) {
-        console.log(await res.json());
-      } else {
-        let error = await res.json();
+      if (res) {
+        let error = res;
         if (error == "Invalid Email") {
           error = "Invalid email";
         } else if (error === "Incorrect password") {
@@ -40,6 +38,8 @@ const Login = () => {
         }
         console.log(error);
         setError(error);
+      } else {
+        navigate('/dashboard');
       }
     } catch (err) {
       console.log(err);
@@ -74,7 +74,7 @@ const Login = () => {
                       </svg>
                     </div>
                   </div>
-                  <p className="hidden text-xs text-red-600 mt-2" id="email-error">Please include a valid email address so we can get back to you</p>
+                  <p className={`${error === "Invalid email" ? '' : "hidden"} text-xs text-red-600 mt-2`} id="email-error">Please include a valid email address</p>
                 </div>
 
                 <div>
@@ -90,7 +90,7 @@ const Login = () => {
                       </svg>
                     </div>
                   </div>
-                  <p className="hidden text-xs text-red-600 mt-2" id="password-error">8+ characters required</p>
+                  <p className={`${error === "Wrong combo" ? '' : 'hidden'} text-xs text-red-600 mt-2`} id="password-error">Incorrect email/password</p>
                 </div>
 
                 <div className="flex items-center">

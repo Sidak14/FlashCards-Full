@@ -1,6 +1,9 @@
-import React, {act, useState} from "react";
+import React, { useContext, useEffect, useState} from "react";
 import TestQuestion from "../components/Cards/TestQuestion";
 import TestAnswer from "../components/Cards/TestAnswer";
+import { AuthContext } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
+import { sendGet } from "../context/backendCommunication";
 
 const allQuestions = [
     {
@@ -86,8 +89,34 @@ const allQuestions = [
 ]
 
 const Test = () => {
+    const { currentUser } = useContext(AuthContext);
+    let navigate = useNavigate();
+    if (!currentUser) {
+        console.log("cant be here");
+        navigate('/');
+    }
+
     const [activeCard, setActiveCard] = useState(false);
-    const [currentQuestion, setcurrentQuestion] = useState(allQuestions.length > 0 ? 0 : -1);
+    const [allQuestions, setAllQuestions] = useState([{
+        question: "Questions are loading",
+        answer: "Please wait",
+        id: 1,
+    }]);
+    const [currentQuestion, setcurrentQuestion] = useState(0);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await sendGet(`/questions/gettest/${currentUser.id}`);
+                setAllQuestions(await res.json());
+                setcurrentQuestion(allQuestions.length > 0 ? 0 : -1);
+            } catch (err) {
+                console.log(err);
+            }
+            console.log("Hi");
+        };
+        fetchData();
+    }, []);
 
     const handleClick = () => {
         setActiveCard(!activeCard);
@@ -103,7 +132,6 @@ const Test = () => {
         } else {
             setcurrentQuestion(currentQuestion + 1);
         }
-        
     }
 
     return (
@@ -132,7 +160,7 @@ const Test = () => {
 
                             {/* back */}
                             <div className="absolute top-0 back">
-                                <TestAnswer text="Well done! You're done with all the questions" title="End" isQuestion="true" clickFunction={handleClick} incrementQuetionFunction={handleClick} />
+                                <TestAnswer text="Well done! You're done with all the questions" title="End" isQuestion="true" clickFunction={handleClick} incrementQuestionFunction={handleClick} />
                             </div>
                             
                         </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const QuestionCard = (props) => {
+const AddQuestionCard = (props) => {
     const [editting, setEditting] = useState(false);
     const [info, setInfo] = useState({
         question: props.question,
@@ -24,7 +24,7 @@ const QuestionCard = (props) => {
         const input = await getQuestionAnswer();
         console.log(input);
         setEditting(false);
-        props.updateFunction(props.id, input);
+        props.addFunction(input);
         setInfo(input);
     }
 
@@ -44,7 +44,7 @@ const QuestionCard = (props) => {
                                 Answer: Type your answer here.
                             </p>
                             <a class="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 decoration-2 hover:text-blue-700 hover:underline focus:underline focus:outline-none focus:text-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-600 dark:focus:text-blue-600" href="#" onClick={handleChange}>
-                            Save
+                            Add
                                 <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="m9 18 6-6-6-6"></path>
                                 </svg>
@@ -53,19 +53,13 @@ const QuestionCard = (props) => {
                     ) : (
                         <div>
                             <p class="mt-2 text-gray-500 dark:text-neutral-400">
-                                {`Question: ${info.question}`}
+                                {`Question: ${props.question}`}
                             </p>
                             <p class="mt-2 text-gray-500 dark:text-neutral-400">
-                                {`Answer: ${info.answer}`}
+                                {`Answer: ${props.answer}`}
                             </p>
                             <a class="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 decoration-2 hover:text-blue-700 hover:underline focus:underline focus:outline-none focus:text-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-600 dark:focus:text-blue-600" href="#" onClick={() => {setEditting(true);}}>
-                            Edit
-                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="m9 18 6-6-6-6"></path>
-                                </svg>
-                            </a>
-                            <a class="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 decoration-2 hover:text-blue-700 hover:underline focus:underline focus:outline-none focus:text-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-600 dark:focus:text-blue-600" href = "#" onClick={() => props.deleteFunction(props.id)}>
-                            Delete
+                            Add Question
                                 <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="m9 18 6-6-6-6"></path>
                                 </svg>
@@ -78,4 +72,4 @@ const QuestionCard = (props) => {
     );
 };
 
-export default QuestionCard;
+export default AddQuestionCard;

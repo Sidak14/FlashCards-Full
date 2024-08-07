@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import { redirect, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
 
 const Navbar = () => {
+    const { currentUser, logout } = useContext(AuthContext);
+
     let navigate = useNavigate();
     let path = '/login';
     const redirectLogin = () => {
         navigate(path);
     }
+
+    const redirectLogout = async () => {
+        await logout();
+        navigate('/');
+    }
+    
 
     return (
         <div className="w-screen">
@@ -19,8 +28,8 @@ const Navbar = () => {
                         <svg className="hs-collapse-open:block hidden shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                         <span className="sr-only">Toggle</span>
                     </button>
-                    <button type="button" onClick={redirectLogin} className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-                        Login
+                    <button type="button" onClick={currentUser ? redirectLogout : redirectLogin} className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+                        {currentUser ? "Logout" : "Login"}
                     </button>
                     </div>
                     <div id="hs-navbar-alignment" className="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:grow-0 sm:basis-auto sm:block sm:order-2" aria-labelledby="hs-navbar-alignment-collapse">
