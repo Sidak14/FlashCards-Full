@@ -17,6 +17,12 @@ const db = new pg.Client({
         }
     },
 });
-db.connect();
+try{
+    db.connect();
+} catch(err) {
+    console.log(err);
+    console.log(process.env.PG_USER, process.env.PG_HOST, process.env.PG_DATABASE, process.env.PG_PASSWORD, process.env.PG_PORT, process.env.PG_CA_CERT);
+}
+
 
 export default db;
