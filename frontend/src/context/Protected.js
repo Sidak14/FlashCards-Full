@@ -10,6 +10,7 @@ const Protected = () => {
     const location = useLocation();
 
     console.log(<Outlet />);
+    console.log("whats good");
     if (currentUser) {
         return (
             <div>

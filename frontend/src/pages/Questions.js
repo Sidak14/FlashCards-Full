@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import QuestionCard from "../components/Cards/QuestionCards";
-import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { sendDelete, sendGet, sendPost, sendPut } from "../context/backendCommunication";
 import AddQuestionCard from "../components/Cards/addQuestionCard";
@@ -91,11 +90,6 @@ const allQuestions = [
 
 const Questions = () => {
     const { currentUser } = useContext(AuthContext);
-    let navigate = useNavigate();
-    if (!currentUser) {
-        console.log("cant be here");
-        navigate('/');
-    }
 
     const [allQuestions, setAllQuestions] = useState([]);
     const [updateQuestions, setUpdateQuestions] = useState(0);
