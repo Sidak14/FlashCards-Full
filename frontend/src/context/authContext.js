@@ -37,7 +37,13 @@ export const AuthContextProvider = ({children}) => {
                 setCurrentUser(null);
             }
         }
-        verifyUser();
+        try{
+            verifyUser();
+        } catch (err) {
+            console.log(err);
+            setCurrentUser(null);
+        }
+        
     }, []);
 
     return (
