@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { sendPost } from "./backendCommunication.js";
+import { sendGet, sendPost } from "./backendCommunication.js";
 
 export const AuthContext = createContext();
 
@@ -24,6 +24,21 @@ export const AuthContextProvider = ({children}) => {
     useEffect(() => {
         localStorage.setItem("user", JSON.stringify(currentUser));
     }, [currentUser]);
+
+    useEffect(() => {
+        const verifyUser = async () => {
+            if (!currentUser) return;
+
+            const res = await sendGet("/auth/isauthorised");
+            const resJson = await res.json();
+            if (!res.ok) {
+                setCurrentUser(null);
+            } else if (resJson !== currentUser.id) {
+                setCurrentUser(null);
+            }
+        }
+        verifyUser();
+    }, []);
 
     return (
         <AuthContext.Provider value={{currentUser, login, logout}}>

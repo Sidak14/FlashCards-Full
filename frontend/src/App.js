@@ -15,6 +15,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import "preline/preline";
 import Test from "./pages/Test";
+import Protected from "./context/Protected";
 
 
 const Layout = () => {
@@ -27,7 +28,23 @@ const Layout = () => {
   );
 };
 
+const ProtectedLayout = () => {
+  return (
+    <Protected>
+      <Outlet />
+    </Protected>
+  );
+};
+
 const router = createBrowserRouter([
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
   {
     path: "/",
     element: <Layout />,
@@ -36,6 +53,12 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+    ]
+  },
+  {
+    path: "/",
+    element: <ProtectedLayout />,
+    children: [
       {
         path: "/dashboard",
         element: <Dashboard />,
@@ -49,15 +72,7 @@ const router = createBrowserRouter([
         element: <Test />
       }
     ]
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
+  }
 ]);
 
 const App = () => {
