@@ -28,15 +28,17 @@ const Layout = () => {
   );
 };
 
-const ProtectedLayout = () => {
-  return (
-    <Protected>
-      <Outlet />
-    </Protected>
-  );
-};
-
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      }
+    ]
+  },
   {
     path: "/register",
     element: <Register />,
@@ -47,17 +49,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <Layout />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-    ]
-  },
-  {
-    path: "/",
-    element: <ProtectedLayout />,
+    element: <Protected />,
     children: [
       {
         path: "/dashboard",
@@ -69,7 +61,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/test",
-        element: <Test />
+        element: <Test />,
       }
     ]
   }
