@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { navigate, useLocation, useNavigate } from "react-router-dom";
+import { sendPost } from "../context/backendCommunication";
 
 const Register = () => {
   const [inputs, setInput] = useState({
@@ -21,14 +22,11 @@ const Register = () => {
     setError("");
     try {
       console.log(inputs);
-      const res = await fetch('http://localhost:8800/api/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(inputs)
-      });
-      //console.log(res);
+      const res = await sendPost("/auth/register", inputs);
 
       if (res.ok) {
         console.log(await res.json());
+        navigate("/login");
       } else {
         let error = await res.json();
         if (error == "Invalid Email") {
