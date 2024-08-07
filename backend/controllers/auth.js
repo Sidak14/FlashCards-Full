@@ -39,14 +39,7 @@ export const register = async (req, res) => {
             );
 
             const user = result.rows[0];
-            req.login(user, (err) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json(err);
-                }
-
-                return res.status(200).json("User has been created.");
-            });
+            return res.status(200).json("User has been created.");
         });
     } catch (err) {
         console.log(err);
@@ -98,4 +91,15 @@ export const logout = (req, res) => {
         sameSite: "none",
         secure: true
     }).status(200).json("User has been logged out");
+}
+
+export const isAuthorised = async (req, res) => {
+    const token = req.cookies.access_token;
+    if (!token) return res.status(401).json("Not authenticated");
+
+    jwt.verify(token, process.env.SESSION_SECRET, async (err, userInfo) => {
+        if (err) return res.status(403).json("Token is not valid!");
+
+        return res.status(200).json(userInfo.id);
+    });
 }
